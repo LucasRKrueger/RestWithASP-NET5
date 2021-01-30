@@ -11,7 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RestWithASPNET.Model.Context;
 using RestWithASPNET.Services.Implementations;
+using Microsoft.EntityFrameworkCore;
 
 namespace RestWithASPNET
 {
@@ -27,8 +29,11 @@ namespace RestWithASPNET
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
+
+            //Will get the configuration in appsettings.json
+            var connection = Configuration["MySqlConnection:MySqlConnectionString"];
+            services.AddDbContext<MySqlContext>(options => options.UseMySql(connection));
 
             //Dependecy Injection
             services.AddScoped<IPersonService, PersonServicesImplementation>();
